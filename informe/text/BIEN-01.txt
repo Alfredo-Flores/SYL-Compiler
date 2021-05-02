@@ -1,0 +1,99 @@
+
+text/BIEN-01:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+080480e0 <.text>:
+	...
+ 8048480:	bf 8e 85 04 08       	mov    edi,0x804858e
+ 8048485:	e9 48 00 00 00       	jmp    0x80484d2
+ 804848a:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 8048490:	50                   	push   eax
+ 8048491:	b8 00 00 00 00       	mov    eax,0x0
+ 8048496:	5b                   	pop    ebx
+ 8048497:	39 c3                	cmp    ebx,eax
+ 8048499:	7f 05                	jg     0x80484a0
+ 804849b:	e9 31 00 00 00       	jmp    0x80484d1
+ 80484a0:	8b 87 08 00 00 00    	mov    eax,DWORD PTR [edi+0x8]
+ 80484a6:	50                   	push   eax
+ 80484a7:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 80484ad:	5b                   	pop    ebx
+ 80484ae:	f7 eb                	imul   ebx
+ 80484b0:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 80484b6:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 80484bc:	50                   	push   eax
+ 80484bd:	b8 01 00 00 00       	mov    eax,0x1
+ 80484c2:	5b                   	pop    ebx
+ 80484c3:	93                   	xchg   ebx,eax
+ 80484c4:	29 d8                	sub    eax,ebx
+ 80484c6:	89 87 04 00 00 00    	mov    DWORD PTR [edi+0x4],eax
+ 80484cc:	e8 b9 ff ff ff       	call   0x804848a
+ 80484d1:	c3                   	ret    
+ 80484d2:	b9 e6 84 04 08       	mov    ecx,0x80484e6
+ 80484d7:	ba 06 00 00 00       	mov    edx,0x6
+ 80484dc:	e8 8f fc ff ff       	call   0x8048170
+ 80484e1:	e9 07 00 00 00       	jmp    0x80484ed
+ 80484e6:	42                   	inc    edx
+ 80484e7:	41                   	inc    ecx
+ 80484e8:	53                   	push   ebx
+ 80484e9:	45                   	inc    ebp
+ 80484ea:	3a 20                	cmp    ah,BYTE PTR [eax]
+ 80484ec:	00 e8                	add    al,ch
+ 80484ee:	1e                   	push   ds
+ 80484ef:	fe                   	(bad)  
+ 80484f0:	ff                   	(bad)  
+ 80484f1:	ff 89 87 00 00 00    	dec    DWORD PTR [ecx+0x87]
+ 80484f7:	00 b9 0c 85 04 08    	add    BYTE PTR [ecx+0x804850c],bh
+ 80484fd:	ba 0b 00 00 00       	mov    edx,0xb
+ 8048502:	e8 69 fc ff ff       	call   0x8048170
+ 8048507:	e9 0c 00 00 00       	jmp    0x8048518
+ 804850c:	45                   	inc    ebp
+ 804850d:	58                   	pop    eax
+ 804850e:	50                   	push   eax
+ 804850f:	4f                   	dec    edi
+ 8048510:	4e                   	dec    esi
+ 8048511:	45                   	inc    ebp
+ 8048512:	4e                   	dec    esi
+ 8048513:	54                   	push   esp
+ 8048514:	45                   	inc    ebp
+ 8048515:	3a 20                	cmp    ah,BYTE PTR [eax]
+ 8048517:	00 e8                	add    al,ch
+ 8048519:	f3 fd                	repz std 
+ 804851b:	ff                   	(bad)  
+ 804851c:	ff 89 87 04 00 00    	dec    DWORD PTR [ecx+0x487]
+ 8048522:	00 b8 01 00 00 00    	add    BYTE PTR [eax+0x1],bh
+ 8048528:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 804852e:	e8 57 ff ff ff       	call   0x804848a
+ 8048533:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 8048539:	50                   	push   eax
+ 804853a:	b8 00 00 00 00       	mov    eax,0x0
+ 804853f:	5b                   	pop    ebx
+ 8048540:	39 c3                	cmp    ebx,eax
+ 8048542:	7c 05                	jl     0x8048549
+ 8048544:	e9 0b 00 00 00       	jmp    0x8048554
+ 8048549:	b8 00 00 00 00       	mov    eax,0x0
+ 804854e:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 8048554:	b9 68 85 04 08       	mov    ecx,0x8048568
+ 8048559:	ba 0b 00 00 00       	mov    edx,0xb
+ 804855e:	e8 0d fc ff ff       	call   0x8048170
+ 8048563:	e9 0c 00 00 00       	jmp    0x8048574
+ 8048568:	52                   	push   edx
+ 8048569:	45                   	inc    ebp
+ 804856a:	53                   	push   ebx
+ 804856b:	55                   	push   ebp
+ 804856c:	4c                   	dec    esp
+ 804856d:	54                   	push   esp
+ 804856e:	41                   	inc    ecx
+ 804856f:	44                   	inc    esp
+ 8048570:	4f                   	dec    edi
+ 8048571:	3a 20                	cmp    ah,BYTE PTR [eax]
+ 8048573:	00 8b 87 08 00 00    	add    BYTE PTR [ebx+0x887],cl
+ 8048579:	00 e8                	add    al,ch
+ 804857b:	11 fc                	adc    esp,edi
+ 804857d:	ff                   	(bad)  
+ 804857e:	ff                   	(bad)  
+ 804857f:	e8 fc fb ff ff       	call   0x8048180
+ 8048584:	e8 f7 fb ff ff       	call   0x8048180
+ 8048589:	e9 72 fd ff ff       	jmp    0x8048300
+	...

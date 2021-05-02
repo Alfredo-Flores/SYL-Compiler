@@ -1,0 +1,44 @@
+
+text/BIEN-08:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+080480e0 <.text>:
+	...
+ 8048480:	bf 0b 85 04 08       	mov    edi,0x804850b
+ 8048485:	e9 5d 00 00 00       	jmp    0x80484e7
+ 804848a:	e9 31 00 00 00       	jmp    0x80484c0
+ 804848f:	b9 a3 84 04 08       	mov    ecx,0x80484a3
+ 8048494:	ba 01 00 00 00       	mov    edx,0x1
+ 8048499:	e8 d2 fc ff ff       	call   0x8048170
+ 804849e:	e9 02 00 00 00       	jmp    0x80484a5
+ 80484a3:	2c 00                	sub    al,0x0
+ 80484a5:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 80484ab:	50                   	push   eax
+ 80484ac:	b8 01 00 00 00       	mov    eax,0x1
+ 80484b1:	5b                   	pop    ebx
+ 80484b2:	01 d8                	add    eax,ebx
+ 80484b4:	89 87 00 00 00 00    	mov    DWORD PTR [edi+0x0],eax
+ 80484ba:	e8 cb ff ff ff       	call   0x804848a
+ 80484bf:	c3                   	ret    
+ 80484c0:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 80484c6:	50                   	push   eax
+ 80484c7:	b8 0a 00 00 00       	mov    eax,0xa
+ 80484cc:	5b                   	pop    ebx
+ 80484cd:	39 c3                	cmp    ebx,eax
+ 80484cf:	7c 05                	jl     0x80484d6
+ 80484d1:	e9 10 00 00 00       	jmp    0x80484e6
+ 80484d6:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 80484dc:	e8 af fc ff ff       	call   0x8048190
+ 80484e1:	e8 a9 ff ff ff       	call   0x804848f
+ 80484e6:	c3                   	ret    
+ 80484e7:	b8 01 00 00 00       	mov    eax,0x1
+ 80484ec:	89 87 00 00 00 00    	mov    DWORD PTR [edi+0x0],eax
+ 80484f2:	e8 93 ff ff ff       	call   0x804848a
+ 80484f7:	b8 0a 00 00 00       	mov    eax,0xa
+ 80484fc:	e8 8f fc ff ff       	call   0x8048190
+ 8048501:	e8 7a fc ff ff       	call   0x8048180
+ 8048506:	e9 f5 fd ff ff       	jmp    0x8048300
+ 804850b:	00 00                	add    BYTE PTR [eax],al
+	...

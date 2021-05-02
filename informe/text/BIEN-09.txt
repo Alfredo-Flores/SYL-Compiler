@@ -1,0 +1,10 @@
+
+text/BIEN-09:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+080480e0 <.text>:
+	...
+ 8048480:	bf 8a 84 04 08       	mov    edi,0x804848a
+ 8048485:	e9 76 fe ff ff       	jmp    0x8048300

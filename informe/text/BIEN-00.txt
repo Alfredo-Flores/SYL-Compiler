@@ -1,0 +1,51 @@
+
+text/BIEN-00:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+080480e0 <.text>:
+	...
+ 8048480:	bf 04 85 04 08       	mov    edi,0x8048504
+ 8048485:	e9 17 00 00 00       	jmp    0x80484a1
+ 804848a:	e9 0c 00 00 00       	jmp    0x804849b
+ 804848f:	b8 02 00 00 00       	mov    eax,0x2
+ 8048494:	89 87 00 00 00 00    	mov    DWORD PTR [edi+0x0],eax
+ 804849a:	c3                   	ret    
+ 804849b:	e8 ef ff ff ff       	call   0x804848f
+ 80484a0:	c3                   	ret    
+ 80484a1:	b9 b5 84 04 08       	mov    ecx,0x80484b5
+ 80484a6:	ba 04 00 00 00       	mov    edx,0x4
+ 80484ab:	e8 c0 fc ff ff       	call   0x8048170
+ 80484b0:	e9 05 00 00 00       	jmp    0x80484ba
+ 80484b5:	4e                   	dec    esi
+ 80484b6:	55                   	push   ebp
+ 80484b7:	4d                   	dec    ebp
+ 80484b8:	3d 00 e8 51 fe       	cmp    eax,0xfe51e800
+ 80484bd:	ff                   	(bad)  
+ 80484be:	ff 89 87 04 00 00    	dec    DWORD PTR [ecx+0x487]
+ 80484c4:	00 e8                	add    al,ch
+ 80484c6:	c0 ff ff             	sar    bh,0xff
+ 80484c9:	ff                   	(bad)  
+ 80484ca:	b9 de 84 04 08       	mov    ecx,0x80484de
+ 80484cf:	ba 06 00 00 00       	mov    edx,0x6
+ 80484d4:	e8 97 fc ff ff       	call   0x8048170
+ 80484d9:	e9 07 00 00 00       	jmp    0x80484e5
+ 80484de:	4e                   	dec    esi
+ 80484df:	55                   	push   ebp
+ 80484e0:	4d                   	dec    ebp
+ 80484e1:	2a 32                	sub    dh,BYTE PTR [edx]
+ 80484e3:	3d 00 8b 87 04       	cmp    eax,0x4878b00
+ 80484e8:	00 00                	add    BYTE PTR [eax],al
+ 80484ea:	00 50 8b             	add    BYTE PTR [eax-0x75],dl
+ 80484ed:	87 00                	xchg   DWORD PTR [eax],eax
+ 80484ef:	00 00                	add    BYTE PTR [eax],al
+ 80484f1:	00 5b f7             	add    BYTE PTR [ebx-0x9],bl
+ 80484f4:	eb e8                	jmp    0x80484de
+ 80484f6:	96                   	xchg   esi,eax
+ 80484f7:	fc                   	cld    
+ 80484f8:	ff                   	(bad)  
+ 80484f9:	ff                   	(bad)  
+ 80484fa:	e8 81 fc ff ff       	call   0x8048180
+ 80484ff:	e9 fc fd ff ff       	jmp    0x8048300
+	...

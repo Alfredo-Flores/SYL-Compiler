@@ -1,0 +1,6 @@
+*.pyc
+*.mb
+Archivos/BIEN-0[0-9]
+Archivos/Compilar
+salida.txt
+ejemplo*

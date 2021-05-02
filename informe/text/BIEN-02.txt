@@ -1,0 +1,130 @@
+
+text/BIEN-02:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+080480e0 <.text>:
+	...
+ 8048480:	bf 23 86 04 08       	mov    edi,0x8048623
+ 8048485:	e9 20 01 00 00       	jmp    0x80485aa
+ 804848a:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 8048490:	89 87 0c 00 00 00    	mov    DWORD PTR [edi+0xc],eax
+ 8048496:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 804849c:	89 87 10 00 00 00    	mov    DWORD PTR [edi+0x10],eax
+ 80484a2:	b8 00 00 00 00       	mov    eax,0x0
+ 80484a7:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 80484ad:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 80484b3:	50                   	push   eax
+ 80484b4:	b8 00 00 00 00       	mov    eax,0x0
+ 80484b9:	5b                   	pop    ebx
+ 80484ba:	39 c3                	cmp    ebx,eax
+ 80484bc:	7c 05                	jl     0x80484c3
+ 80484be:	e9 0e 00 00 00       	jmp    0x80484d1
+ 80484c3:	8b 87 0c 00 00 00    	mov    eax,DWORD PTR [edi+0xc]
+ 80484c9:	f7 d8                	neg    eax
+ 80484cb:	89 87 0c 00 00 00    	mov    DWORD PTR [edi+0xc],eax
+ 80484d1:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 80484d7:	50                   	push   eax
+ 80484d8:	b8 00 00 00 00       	mov    eax,0x0
+ 80484dd:	5b                   	pop    ebx
+ 80484de:	39 c3                	cmp    ebx,eax
+ 80484e0:	7c 05                	jl     0x80484e7
+ 80484e2:	e9 0e 00 00 00       	jmp    0x80484f5
+ 80484e7:	8b 87 10 00 00 00    	mov    eax,DWORD PTR [edi+0x10]
+ 80484ed:	f7 d8                	neg    eax
+ 80484ef:	89 87 10 00 00 00    	mov    DWORD PTR [edi+0x10],eax
+ 80484f5:	8b 87 10 00 00 00    	mov    eax,DWORD PTR [edi+0x10]
+ 80484fb:	50                   	push   eax
+ 80484fc:	b8 00 00 00 00       	mov    eax,0x0
+ 8048501:	5b                   	pop    ebx
+ 8048502:	39 c3                	cmp    ebx,eax
+ 8048504:	7f 05                	jg     0x804850b
+ 8048506:	e9 56 00 00 00       	jmp    0x8048561
+ 804850b:	8b 87 10 00 00 00    	mov    eax,DWORD PTR [edi+0x10]
+ 8048511:	a8 01                	test   al,0x1
+ 8048513:	7b 05                	jnp    0x804851a
+ 8048515:	e9 16 00 00 00       	jmp    0x8048530
+ 804851a:	8b 87 08 00 00 00    	mov    eax,DWORD PTR [edi+0x8]
+ 8048520:	50                   	push   eax
+ 8048521:	8b 87 0c 00 00 00    	mov    eax,DWORD PTR [edi+0xc]
+ 8048527:	5b                   	pop    ebx
+ 8048528:	01 d8                	add    eax,ebx
+ 804852a:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 8048530:	8b 87 0c 00 00 00    	mov    eax,DWORD PTR [edi+0xc]
+ 8048536:	50                   	push   eax
+ 8048537:	b8 02 00 00 00       	mov    eax,0x2
+ 804853c:	5b                   	pop    ebx
+ 804853d:	f7 eb                	imul   ebx
+ 804853f:	89 87 0c 00 00 00    	mov    DWORD PTR [edi+0xc],eax
+ 8048545:	8b 87 10 00 00 00    	mov    eax,DWORD PTR [edi+0x10]
+ 804854b:	50                   	push   eax
+ 804854c:	b8 02 00 00 00       	mov    eax,0x2
+ 8048551:	5b                   	pop    ebx
+ 8048552:	93                   	xchg   ebx,eax
+ 8048553:	99                   	cdq    
+ 8048554:	f7 fb                	idiv   ebx
+ 8048556:	89 87 10 00 00 00    	mov    DWORD PTR [edi+0x10],eax
+ 804855c:	e9 94 ff ff ff       	jmp    0x80484f5
+ 8048561:	8b 87 00 00 00 00    	mov    eax,DWORD PTR [edi+0x0]
+ 8048567:	50                   	push   eax
+ 8048568:	b8 00 00 00 00       	mov    eax,0x0
+ 804856d:	5b                   	pop    ebx
+ 804856e:	39 c3                	cmp    ebx,eax
+ 8048570:	7c 05                	jl     0x8048577
+ 8048572:	e9 0e 00 00 00       	jmp    0x8048585
+ 8048577:	8b 87 08 00 00 00    	mov    eax,DWORD PTR [edi+0x8]
+ 804857d:	f7 d8                	neg    eax
+ 804857f:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 8048585:	8b 87 04 00 00 00    	mov    eax,DWORD PTR [edi+0x4]
+ 804858b:	50                   	push   eax
+ 804858c:	b8 00 00 00 00       	mov    eax,0x0
+ 8048591:	5b                   	pop    ebx
+ 8048592:	39 c3                	cmp    ebx,eax
+ 8048594:	7c 05                	jl     0x804859b
+ 8048596:	e9 0e 00 00 00       	jmp    0x80485a9
+ 804859b:	8b 87 08 00 00 00    	mov    eax,DWORD PTR [edi+0x8]
+ 80485a1:	f7 d8                	neg    eax
+ 80485a3:	89 87 08 00 00 00    	mov    DWORD PTR [edi+0x8],eax
+ 80485a9:	c3                   	ret    
+ 80485aa:	b9 be 85 04 08       	mov    ecx,0x80485be
+ 80485af:	ba 03 00 00 00       	mov    edx,0x3
+ 80485b4:	e8 b7 fb ff ff       	call   0x8048170
+ 80485b9:	e9 04 00 00 00       	jmp    0x80485c2
+ 80485be:	58                   	pop    eax
+ 80485bf:	3a 20                	cmp    ah,BYTE PTR [eax]
+ 80485c1:	00 e8                	add    al,ch
+ 80485c3:	49                   	dec    ecx
+ 80485c4:	fd                   	std    
+ 80485c5:	ff                   	(bad)  
+ 80485c6:	ff 89 87 00 00 00    	dec    DWORD PTR [ecx+0x87]
+ 80485cc:	00 b9 e1 85 04 08    	add    BYTE PTR [ecx+0x80485e1],bh
+ 80485d2:	ba 03 00 00 00       	mov    edx,0x3
+ 80485d7:	e8 94 fb ff ff       	call   0x8048170
+ 80485dc:	e9 04 00 00 00       	jmp    0x80485e5
+ 80485e1:	59                   	pop    ecx
+ 80485e2:	3a 20                	cmp    ah,BYTE PTR [eax]
+ 80485e4:	00 e8                	add    al,ch
+ 80485e6:	26                   	es
+ 80485e7:	fd                   	std    
+ 80485e8:	ff                   	(bad)  
+ 80485e9:	ff 89 87 04 00 00    	dec    DWORD PTR [ecx+0x487]
+ 80485ef:	00 e8                	add    al,ch
+ 80485f1:	95                   	xchg   ebp,eax
+ 80485f2:	fe                   	(bad)  
+ 80485f3:	ff                   	(bad)  
+ 80485f4:	ff                   	(bad)  
+ 80485f5:	b9 09 86 04 08       	mov    ecx,0x8048609
+ 80485fa:	ba 04 00 00 00       	mov    edx,0x4
+ 80485ff:	e8 6c fb ff ff       	call   0x8048170
+ 8048604:	e9 05 00 00 00       	jmp    0x804860e
+ 8048609:	58                   	pop    eax
+ 804860a:	2a 59 3d             	sub    bl,BYTE PTR [ecx+0x3d]
+ 804860d:	00 8b 87 08 00 00    	add    BYTE PTR [ebx+0x887],cl
+ 8048613:	00 e8                	add    al,ch
+ 8048615:	77 fb                	ja     0x8048612
+ 8048617:	ff                   	(bad)  
+ 8048618:	ff                   	(bad)  
+ 8048619:	e8 62 fb ff ff       	call   0x8048180
+ 804861e:	e9 dd fc ff ff       	jmp    0x8048300
+	...
