@@ -1,5 +1,7 @@
 import os
 import stat
+from functools import reduce
+
 import header_fix
 
 BYTES_POR_VARIABLE = 4
@@ -52,7 +54,7 @@ def salto(adonde, donde_estoy):
 class GeneradorLinux(object):
 	def __init__(self, ruta_ejec):
 		self.ruta = ruta_ejec
-		self.ejecutable = open(ruta_ejec, "w")
+		self.ejecutable = open(ruta_ejec, "w", encoding="utf-8")
 		self.buffer = ""
 		self.stack = []
 		self.stack_while = []
@@ -79,9 +81,9 @@ class GeneradorLinux(object):
 	
 	def finalizar(self, cant_variables):
 		#Pongo jum de salida de prograa
-		self.buffer += traduce(JMP + endian(salto(POS_RUTINA_SALIDA ,len(self.buffer) + 5)))
+		self.buffer += traduce(JMP + list(endian(salto(POS_RUTINA_SALIDA ,len(self.buffer) + 5))))
 		#Modifico el edi
-		self.buffer = self.buffer[:self.pos_edi + 1] + traduce([EDI] + endian(header_fix.VIRTUAL_ADDRESS + len(self.buffer))) + self.buffer[self.pos_edi + 6:]
+		self.buffer = self.buffer[:self.pos_edi + 1] + traduce([EDI] + list(endian(header_fix.VIRTUAL_ADDRESS + len(self.buffer)))) + self.buffer[self.pos_edi + 6:]
 		#agrego los 0s para cada variable
 		self.buffer += traduce([0 for i in range(cant_variables * BYTES_POR_VARIABLE)])
 		#Pongo en filesize y memory size el valor del tam del archivo
@@ -107,11 +109,11 @@ class GeneradorLinux(object):
 	
 	def factor_numero(self, valor):
 		valor = int(valor)
-		self.buffer += traduce(MOV_EAX_CONS + endian(valor))
+		self.buffer += traduce(MOV_EAX_CONS + list(endian(valor)))
 		self._push_eax()
 	
 	def factor_variable(self, num_var):
-		self.buffer += traduce(MOV_EAX_VAR + endian(BYTES_POR_VARIABLE * num_var))
+		self.buffer += traduce(MOV_EAX_VAR + list(endian(BYTES_POR_VARIABLE * num_var)))
 		self._push_eax()
 		
 	def multiplicar(self):
@@ -141,24 +143,24 @@ class GeneradorLinux(object):
 	
 	def asignar(self, numero_var):
 		self._pop_eax()
-		self.buffer += traduce(MOV_VAR + endian(BYTES_POR_VARIABLE * numero_var))
+		self.buffer += traduce(MOV_VAR + list(endian(BYTES_POR_VARIABLE * numero_var)))
 	
 	def write(self, valor=None):
 		if valor is None:
 			#Valor desde expresion
 			self._pop_eax()
-			self.buffer += traduce(CALL + endian(salto(POS_RUTINA_IMPR_NUMEROS,(len(self.buffer) + 5))))
+			self.buffer += traduce(CALL + list(endian(salto(POS_RUTINA_IMPR_NUMEROS,(len(self.buffer) + 5)))))
 		else:
 			#Valor desde cadena
 			offset = 20
-			self.buffer += traduce(MOV_ECX_CONS + endian(header_fix.ADDR - 0xe0 + len(self.buffer) + offset)) #revisar
-			self.buffer += traduce(MOV_EDX_CONS + endian(len(valor)))
-			self.buffer += traduce(CALL + endian(salto(POS_RUTINA_IMPR_CADENA, len(self.buffer) + 5)))
-			self.buffer += traduce(JMP + endian(len(valor) + 1))
+			self.buffer += traduce(MOV_ECX_CONS + list(endian(header_fix.ADDR - 0xe0 + len(self.buffer) + offset))) #revisar
+			self.buffer += traduce(MOV_EDX_CONS + list(endian(len(valor))))
+			self.buffer += traduce(CALL + list(endian(salto(POS_RUTINA_IMPR_CADENA, len(self.buffer) + 5))))
+			self.buffer += traduce(JMP + list(endian(len(valor) + 1)))
 			self.buffer += valor + chr(0)		
 	
 	def writeln(self):
-		self.buffer += traduce(CALL + endian(salto(POS_RUTINA_SALTO_LINEA ,(len(self.buffer) + 5))))
+		self.buffer += traduce(CALL + list(endian(salto(POS_RUTINA_SALTO_LINEA ,(len(self.buffer) + 5)))))
 		
 	def odd(self):
 		self._pop_eax()
@@ -176,21 +178,21 @@ class GeneradorLinux(object):
 		long_ult = self.stack.pop()
 		long_actual = len(self.buffer)
 		distancia = long_actual - long_ult
-		self.buffer = self.buffer[0: long_ult - 5] + traduce(JMP + endian(distancia)) + self.buffer[long_ult:]
+		self.buffer = self.buffer[0: long_ult - 5] + traduce(JMP + list(endian(distancia))) + self.buffer[long_ult:]
 	
 	def recordar_while(self):
 		self.stack_while.append(len(self.buffer))
 	
 	def salto_while(self):
 		pos_while = self.stack_while.pop()
-		self.buffer += traduce(JMP + endian(salto(pos_while, len(self.buffer) + 5)))
+		self.buffer += traduce(JMP + list(endian(salto(pos_while, len(self.buffer) + 5))))
 		
 	def readln(self, numero_var):
-		self.buffer += traduce(CALL + endian(salto(POS_RUTINA_LECTURA ,len(self.buffer) + 5)))
-		self.buffer += traduce(MOV_VAR + endian(BYTES_POR_VARIABLE * numero_var))
+		self.buffer += traduce(CALL + list(endian(salto(POS_RUTINA_LECTURA ,len(self.buffer) + 5))))
+		self.buffer += traduce(MOV_VAR + list(endian(BYTES_POR_VARIABLE * numero_var)))
 	
 	def call(self, posicion):
-		self.buffer += traduce(CALL + endian(salto(posicion, len(self.buffer) + 5)))
+		self.buffer += traduce(CALL + list(endian(salto(posicion, len(self.buffer) + 5))))
 	
 	def marcar_bloque(self):
 		self.buffer += traduce(JMP + [0x0 for i in range(4)])
@@ -241,4 +243,4 @@ class GeneradorNulo(object):
 	def agregar_return(self): pass
 	def __len__(self): return 0
 	def finalizar(self, cant_variables):
-		print "No se genero archivo ejecutable por encontrarse al menos un error"
+		print("No se genero archivo ejecutable por encontrarse al menos un error")

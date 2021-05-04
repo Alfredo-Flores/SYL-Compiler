@@ -1,4 +1,7 @@
 #Por si la vuelvo a necesitar
+from functools import reduce
+
+
 def pasar(hexas):
 	bytes = []
 	cada = len(hexas) / 16

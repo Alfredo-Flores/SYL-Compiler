@@ -158,6 +158,20 @@ class AnalizadorLexico(object):
 			self._leer_linea()
 		self.tipo = EOF
 		return EOF
+
+	def obtener_valor(self):
+		if self.freno:
+			self.freno = False
+			return self.tipo
+
+		while self.quedan_lineas:
+			for index, c in enumerate(self.linea_actual):
+
+				return c
+
+			self._leer_linea()
+		self.tipo = EOF
+		return EOF
 	
 	def _obtener_completo(self, index, numero = False):
 		formado = ""
@@ -227,10 +241,10 @@ class AnalizadorLexico(object):
 if __name__=="__main__":
 	output = open("salida.txt", "w")
 	import sys
-	ruta = sys.argv[1] if len(sys.argv) > 1 else "ejemplo.txt"
+	ruta = sys.argv[1] if len(sys.argv) > 1 else "Archivos/BIEN-01.PL0"
 	al = AnalizadorLexico(ruta, output)
 	while True:
 		c = al.obtener_simbolo()
 		if c == EOF: break
-		print c
+		print(c)
 	output.close()
