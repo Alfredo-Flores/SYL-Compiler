@@ -75,12 +75,15 @@ class AnalizadorSintactico(object):
                 simbolo = self.scanner.obtener_simbolo()
                 if simbolo == AnalizadorLexico.IDENTIFICADOR:
                     identificador = self.scanner.obtener_valor_actual()
+                    if self.scanner.identificador_largo():
+                        self.out.write("Error Sintactico: \n")
                     try:
                         self.semantico.agregar_identificador(base, desplazamiento, identificador,
                                                              AnalizadorSemantico.VARIABLE)
                         desplazamiento += 1
                     except:
-                        self.out.write("exception\n")
+                        self.out.write("asfsadf\n")
+
                 else:
                     self.out.write("Error Sintactico: declaracion de variable no seguida de un identificador\n")
 
@@ -102,9 +105,11 @@ class AnalizadorSintactico(object):
             if self.scanner.identificador_largo():
                 self.out.write("identificador largo\n")
             try:
-                self.semantico.agregar_identificador(base, desplazamiento, identificador,AnalizadorSemantico.PROCEDIMIENTO)
+                self.semantico.agregar_identificador(base, desplazamiento, identificador,
+                                                     AnalizadorSemantico.PROCEDIMIENTO)
                 desplazamiento += 1
             except:
+                self.out.write("identificador largo\n")
                 continue
 
             simbolo = self.scanner.obtener_simbolo()
@@ -112,10 +117,12 @@ class AnalizadorSintactico(object):
                 self.out.write(
                     "Error Sintactico: Luego de la identificacion de un procedimiento se esperaba por punto y coma (;)\n")
                 self.scanner.frenar()
-            # continue
+                # continue
             self._parsear_bloque(base + desplazamiento)
+
             if self.scanner.obtener_tipo_actual() != AnalizadorLexico.PUNTO_Y_COMA:
                 self.out.write("Error Sintactico: Luego de definir un procedimiento se esperaba por punto y coma (;)\n")
+
                 continue
             simbolo = self.scanner.obtener_simbolo()
 
@@ -135,6 +142,7 @@ class AnalizadorSintactico(object):
             identificador = self.scanner.obtener_valor_actual()
 
             if not self.semantico.invocacion_procedimiento_correcta(identificador, base, desplazamiento):
+                self.out.write("identificador largo\n")
                 if self.semantico.agregar_comodin(identificador, base, desplazamiento):
                     desplazamiento += 1
             simbolo = self.scanner.obtener_simbolo()
@@ -155,6 +163,7 @@ class AnalizadorSintactico(object):
             simbolo = self.scanner.obtener_tipo_actual()
             if not (simbolo == AnalizadorLexico.RESERVADA and self.scanner.obtener_valor_actual().lower() == DO):
                 self.out.write("Error Sintactico: Se esperaba un 'do' luego de la condicion de un 'while'\n")
+
                 if not (simbolo == AnalizadorLexico.RESERVADA and self.scanner.obtener_valor_actual().lower() == THEN):
                     self.scanner.frenar()
             simbolo = self.scanner.obtener_simbolo()
@@ -190,10 +199,12 @@ class AnalizadorSintactico(object):
             simbolo = self.scanner.obtener_simbolo()
             if simbolo == AnalizadorLexico.CADENA:
                 if self.scanner.error_en_cadena():
-                    valor = self.scanner.obtener_valor_actual()
-                    simbolo = self.scanner.obtener_simbolo()
+                    self.out.write("identificador largo\n")
+                valor = self.scanner.obtener_valor_actual()
+                simbolo = self.scanner.obtener_simbolo()
             else:
                 desplazamiento = self._parsear_expresion(base, desplazamiento)
+
 
             while self.scanner.obtener_tipo_actual() == AnalizadorLexico.COMA:
                 simbolo = self.scanner.obtener_simbolo()
@@ -207,6 +218,11 @@ class AnalizadorSintactico(object):
             if self.scanner.obtener_tipo_actual() != AnalizadorLexico.CERRAR_PARENTESIS:
                 self.out.write("Error Sintactico: Se esperaba un cierre de parentesis luego de write \n")
             simbolo = self.scanner.obtener_simbolo()
+
+
+
+
+
 
         elif valor.lower() == READLN:
             simbolo = self.scanner.obtener_simbolo()
@@ -222,7 +238,6 @@ class AnalizadorSintactico(object):
             if not self.semantico.lectura_correcta(identificador, base, desplazamiento):
                 if self.semantico.agregar_comodin(identificador, base, desplazamiento):
                     desplazamiento += 1
-
 
             simbolo = self.scanner.obtener_simbolo()
             while simbolo == AnalizadorLexico.COMA:
@@ -291,8 +306,9 @@ class AnalizadorSintactico(object):
             if operador == AnalizadorLexico.MAS:
                 self.out.write("mas\n")
             elif operador == AnalizadorLexico.MENOS:
+                self.out.write("menos\n")
 
-                simbolo = self.scanner.obtener_tipo_actual()
+            simbolo = self.scanner.obtener_tipo_actual()
             if simbolo == AnalizadorLexico.MAS or simbolo == AnalizadorLexico.MENOS:
                 operador = simbolo
                 simbolo = self.scanner.obtener_simbolo()
@@ -326,8 +342,9 @@ class AnalizadorSintactico(object):
                     desplazamiento += 1
             if self.semantico.obtener_tipo(identificador, base, desplazamiento) == AnalizadorSemantico.CONSTANTE:
                 self.out.write("constante\n")
-            else:  # Variable
-                simbolo = self.scanner.obtener_simbolo()
+            else:  # Variable'
+                self.out.write("Variable\n")
+            simbolo = self.scanner.obtener_simbolo()
         elif simbolo == AnalizadorLexico.ABRIR_PARENTESIS:
             simbolo = self.scanner.obtener_simbolo()
             self._parsear_expresion(base, desplazamiento)
@@ -336,7 +353,7 @@ class AnalizadorSintactico(object):
                 simbolo = self.scanner.obtener_simbolo()
             else:
                 self.out.write("Error Sintactico: Cierre de parentesis faltante\n")
-        # self.scanner.frenar()
+                # self.scanner.frenar()
         else:
             valor = self.scanner.obtener_valor_actual()
             self.out.write("Error Sintactico: Simbolo no esperado: " + valor if valor is not None else simbolo + "\n")

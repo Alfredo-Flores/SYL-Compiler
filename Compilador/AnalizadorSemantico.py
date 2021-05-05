@@ -24,6 +24,7 @@ class AnalizadorSemantico(object):
 		if len(self.tabla) < base + desplazamiento:
 			raise ValueError("Base + desplazamiento fuera de rango")
 		if self._identificador_existente(nombre, base, desplazamiento):
+			self.out.write("Error Semantico: Variable Duplicada\n")
 			raise ValueError("Identificador en uso en este ambiente")
 		
 		if tipo == VARIABLE:
@@ -43,7 +44,7 @@ class AnalizadorSemantico(object):
 				else:
 					self.out.write("Error Semantico: " + mensaje_tipo_incorrecto + "\n")
 					return False
-		self.out.write("Error Semantico: Identificador no encontrado ("+ nombre +")\n")
+		self.out.write("Error Semantico: Identificador o variable no definida ("+ nombre +")\n")
 		return False
 		
 	def asignacion_correcta(self, nombre, base, desplazamiento):
