@@ -1,5 +1,4 @@
 import AnalizadorLexico
-from tabulate import tabulate
 
 class CodigoIntermedio:
     def __init__(self):
@@ -18,7 +17,18 @@ class CodigoIntermedio:
         for linea, cuadruplo in enumerate(self.cuadruplos):
             listaFinal.append([linea, cuadruplo[0],  cuadruplo[1],  cuadruplo[2], cuadruplo[3]])
 
-        print(tabulate(listaFinal, ["No.", "Operador", "Operando 1", "Operando 2", "Resultado"], tablefmt="simple"))
+        header = ("No.", "Operador", "Operando 1", "Operando 2", "Resultado")
+        widths = [len(cell) for cell in header]
+        for row in listaFinal:
+            for i, cell in enumerate(row):
+                widths[i] = max(len(str(cell)), widths[i])
+
+        formatted_row = ' '.join('{:%d}' % width for width in widths)
+
+        print(formatted_row.format(*header))
+        for row in listaFinal:
+            print(formatted_row.format(*row))
+
 
     def generarCodigo(self):
         indice_operador = len(self.pila_operadores) - 1
