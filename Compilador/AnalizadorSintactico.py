@@ -1,5 +1,6 @@
 import AnalizadorLexico
 import AnalizadorSemantico
+import CodigoIntermedio
 
 CONST = "const"
 VAR = "var"
@@ -19,10 +20,14 @@ READLN = "readln"
 
 class AnalizadorSintactico(object):
 
-    def __init__(self, scanner, semantico, output):
+    def __init__(self, scanner, semantico, generador, output):
         self.out = output
         self.scanner = scanner
         self.semantico = semantico
+        self.generador = generador
+        self.op1 = None
+        self.op2 = None
+        self.operador = None
 
     def _parsear_bloque(self, base=0):
         desplazamiento = 0
@@ -34,26 +39,25 @@ class AnalizadorSintactico(object):
                 simbolo = self.scanner.obtener_simbolo()
                 if simbolo == AnalizadorLexico.IDENTIFICADOR:
                     identificador = self.scanner.obtener_valor_actual()
-                    if self.scanner.identificador_largo():
-                        self.out.write("identificador largo\n")
                     simbolo = self.scanner.obtener_simbolo()
                     if simbolo != AnalizadorLexico.IGUAL:
                         self.out.write("Error Sintactico: asignacion de constante esperada (=)\n")
                         self.scanner.frenar()
 
                     simbolo = self.scanner.obtener_simbolo()
-                    if simbolo == AnalizadorLexico.NUMERO:
-                        if self.scanner.numero_largo():
-                            self.out.write("numero largo\n")
-                    else:
+                    if simbolo != AnalizadorLexico.NUMERO:
                         self.out.write("Error Sintactico: asignacion de constante a un valor no numerico\n")
                         self.scanner.frenar()
-
                     try:
                         self.semantico.agregar_identificador(base, desplazamiento, identificador,
                                                              AnalizadorSemantico.CONSTANTE,
                                                              self.scanner.obtener_valor_actual())
                         desplazamiento += 1
+
+                        self.generador.pila_operandos.append(self.scanner.obtener_valor_actual())
+                        self.generador.pila_operandos.append(identificador)
+                        self.generador.pila_operadores.append(AnalizadorLexico.ASIGNACION)
+                        self.generador.generarCodigo()
                     except:
                         self.out.write("exepcion\n")
                     simbolo = self.scanner.obtener_simbolo()
@@ -75,14 +79,12 @@ class AnalizadorSintactico(object):
                 simbolo = self.scanner.obtener_simbolo()
                 if simbolo == AnalizadorLexico.IDENTIFICADOR:
                     identificador = self.scanner.obtener_valor_actual()
-                    if self.scanner.identificador_largo():
-                        self.out.write("Error Sintactico: \n")
                     try:
                         self.semantico.agregar_identificador(base, desplazamiento, identificador,
                                                              AnalizadorSemantico.VARIABLE)
                         desplazamiento += 1
                     except:
-                        self.out.write("asfsadf\n")
+                        self.out.write("Error Semantico: Variable Duplicada\n")
 
                 else:
                     self.out.write("Error Sintactico: declaracion de variable no seguida de un identificador\n")
@@ -102,8 +104,6 @@ class AnalizadorSintactico(object):
                 self.out.write("Error Sintactico: declaracion de procedimiento no seguida de un identificador\n")
                 continue
             identificador = self.scanner.obtener_valor_actual()
-            if self.scanner.identificador_largo():
-                self.out.write("identificador largo\n")
             try:
                 self.semantico.agregar_identificador(base, desplazamiento, identificador,
                                                      AnalizadorSemantico.PROCEDIMIENTO)
@@ -142,7 +142,6 @@ class AnalizadorSintactico(object):
             identificador = self.scanner.obtener_valor_actual()
 
             if not self.semantico.invocacion_procedimiento_correcta(identificador, base, desplazamiento):
-                self.out.write("identificador largo\n")
                 if self.semantico.agregar_comodin(identificador, base, desplazamiento):
                     desplazamiento += 1
             simbolo = self.scanner.obtener_simbolo()
@@ -151,16 +150,25 @@ class AnalizadorSintactico(object):
             simbolo = self.scanner.obtener_simbolo()
             desplazamiento = self._parsear_condicion(base, desplazamiento)
             simbolo = self.scanner.obtener_tipo_actual()
+
+            self.generador.generarSaltoEnFalso()
+
             if simbolo == AnalizadorLexico.RESERVADA and self.scanner.obtener_valor_actual().lower() == THEN:
                 simbolo = self.scanner.obtener_simbolo()
                 desplazamiento = self._parsear_proposicion(base, desplazamiento)
+                self.generador.rellenarSaltoEnFalso()
             else:
                 self.out.write("Error Sintactico: Se esperaba un 'then' luego de la condicion de un 'if'\n")
                 self.scanner.frenar()
         elif valor.lower() == WHILE:
+            self.generador.generarSalto()
+
             simbolo = self.scanner.obtener_simbolo()
             desplazamiento = self._parsear_condicion(base, desplazamiento)
             simbolo = self.scanner.obtener_tipo_actual()
+
+            self.generador.generarSaltoEnFalso()
+
             if not (simbolo == AnalizadorLexico.RESERVADA and self.scanner.obtener_valor_actual().lower() == DO):
                 self.out.write("Error Sintactico: Se esperaba un 'do' luego de la condicion de un 'while'\n")
 
@@ -168,7 +176,8 @@ class AnalizadorSintactico(object):
                     self.scanner.frenar()
             simbolo = self.scanner.obtener_simbolo()
             desplazamiento = self._parsear_proposicion(base, desplazamiento)
-
+            self.generador.rellenarSaltoEnFalso()
+            self.generador.generarSaltoIncondicional()
 
         elif valor.lower() == BEGIN:
             while True:
@@ -198,13 +207,10 @@ class AnalizadorSintactico(object):
                     return desplazamiento
             simbolo = self.scanner.obtener_simbolo()
             if simbolo == AnalizadorLexico.CADENA:
-                if self.scanner.error_en_cadena():
-                    self.out.write("identificador largo\n")
                 valor = self.scanner.obtener_valor_actual()
                 simbolo = self.scanner.obtener_simbolo()
             else:
                 desplazamiento = self._parsear_expresion(base, desplazamiento)
-
 
             while self.scanner.obtener_tipo_actual() == AnalizadorLexico.COMA:
                 simbolo = self.scanner.obtener_simbolo()
@@ -218,10 +224,6 @@ class AnalizadorSintactico(object):
             if self.scanner.obtener_tipo_actual() != AnalizadorLexico.CERRAR_PARENTESIS:
                 self.out.write("Error Sintactico: Se esperaba un cierre de parentesis luego de write \n")
             simbolo = self.scanner.obtener_simbolo()
-
-
-
-
 
 
         elif valor.lower() == READLN:
@@ -270,6 +272,10 @@ class AnalizadorSintactico(object):
             simbolo = self.scanner.obtener_simbolo()
             desplazamiento = self._parsear_expresion(base, desplazamiento)
 
+            self.generador.pila_operandos.append(identificador)
+            self.generador.pila_operadores.append(AnalizadorLexico.ASIGNACION)
+            self.generador.generarCodigo()
+
         return desplazamiento
 
     def _parsear_condicion(self, base, desplazamiento):
@@ -283,6 +289,18 @@ class AnalizadorSintactico(object):
             simbolo = self.scanner.obtener_tipo_actual()
             comparador = self.scanner.obtener_valor_actual()
             if simbolo == AnalizadorLexico.IGUAL or simbolo == AnalizadorLexico.MAYOR or simbolo == AnalizadorLexico.MAYOR_IGUAL or simbolo == AnalizadorLexico.MENOR or simbolo == AnalizadorLexico.MENOR_IGUAL or simbolo == AnalizadorLexico.DISTINTO:
+
+                if simbolo == AnalizadorLexico.IGUAL:
+                    self.generador.pila_operadores.append(AnalizadorLexico.IGUAL)
+                elif simbolo == AnalizadorLexico.MAYOR:
+                    self.generador.pila_operadores.append(AnalizadorLexico.MAYOR)
+                elif simbolo == AnalizadorLexico.MAYOR_IGUAL:
+                    self.generador.pila_operadores.append(AnalizadorLexico.MAYOR_IGUAL)
+                elif simbolo == AnalizadorLexico.MENOR:
+                    self.generador.pila_operadores.append(AnalizadorLexico.MENOR)
+                elif simbolo == AnalizadorLexico.DISTINTO:
+                    self.generador.pila_operadores.append(AnalizadorLexico.DISTINTO)
+
                 simbolo = self.scanner.obtener_simbolo()
                 desplazamiento = self._parsear_expresion(base, desplazamiento)
             else:
@@ -303,12 +321,21 @@ class AnalizadorSintactico(object):
 
             if negar:
                 negar = False
+                # self.out.write("Negar\n")
             if operador == AnalizadorLexico.MAS:
-                self.out.write("mas\n")
+                self.generador.pila_operadores.append(AnalizadorLexico.MAS)
+                # self.out.write("Mas\n")
             elif operador == AnalizadorLexico.MENOS:
-                self.out.write("menos\n")
+                self.generador.pila_operadores.append(AnalizadorLexico.MENOS)
+                # self.out.write("Menos\n")
 
             simbolo = self.scanner.obtener_tipo_actual()
+
+            if len(self.generador.pila_operandos) > 1 and len(self.generador.pila_operadores) > 0 and \
+                    self.generador.pila_operadores[
+                        len(self.generador.pila_operadores) - 1] != AnalizadorLexico.ASIGNACION:
+                self.generador.generarCodigo()
+
             if simbolo == AnalizadorLexico.MAS or simbolo == AnalizadorLexico.MENOS:
                 operador = simbolo
                 simbolo = self.scanner.obtener_simbolo()
@@ -317,13 +344,22 @@ class AnalizadorSintactico(object):
 
     def _parsear_termino(self, base, desplazamiento):
         operador = None
+        banderaSeguimiento = False
         while True:
             desplazamiento = self._parsear_factor(base, desplazamiento)
             if operador == AnalizadorLexico.MULTIPLICAR:
-                self.out.write("multiplicar\n")
+                self.operador = AnalizadorLexico.MULTIPLICAR
+                self.generador.pila_operadores.append(AnalizadorLexico.MULTIPLICAR)
+                # self.out.write("Multiplicar\n")
             elif operador == AnalizadorLexico.DIVIDIR:
-                self.out.write("Dividir\n")
+                self.operador = AnalizadorLexico.DIVIDIR
+                self.generador.pila_operadores.append(AnalizadorLexico.DIVIDIR)
+                # self.out.write("Dividir\n")
             simbolo = self.scanner.obtener_tipo_actual()
+
+            if len(self.generador.pila_operandos) > 1 and len(self.generador.pila_operadores) > 0:
+                self.generador.generarCodigo()
+
             if simbolo == AnalizadorLexico.MULTIPLICAR or simbolo == AnalizadorLexico.DIVIDIR:
                 operador = simbolo
                 simbolo = self.scanner.obtener_simbolo()
@@ -333,17 +369,22 @@ class AnalizadorSintactico(object):
     def _parsear_factor(self, base, desplazamiento):
         simbolo = self.scanner.obtener_tipo_actual()
         if simbolo == AnalizadorLexico.NUMERO:
-            if self.scanner.numero_largo():
-                simbolo = self.scanner.obtener_simbolo()
+            self.generador.pila_operandos.append(self.scanner.obtener_valor_actual())
+            simbolo = self.scanner.obtener_simbolo()
+
         elif simbolo == AnalizadorLexico.IDENTIFICADOR:
             identificador = self.scanner.obtener_valor_actual()
             if not self.semantico.factor_correcto(identificador, base, desplazamiento):
                 if self.semantico.agregar_comodin(identificador, base, desplazamiento):
                     desplazamiento += 1
             if self.semantico.obtener_tipo(identificador, base, desplazamiento) == AnalizadorSemantico.CONSTANTE:
-                self.out.write("constante\n")
-            else:  # Variable'
-                self.out.write("Variable\n")
+                self.generador.pila_operandos.append(identificador)
+
+                # self.out.write("Constante\n")
+            else:
+                self.generador.pila_operandos.append(identificador)
+
+                # self.out.write("Variable\n")
             simbolo = self.scanner.obtener_simbolo()
         elif simbolo == AnalizadorLexico.ABRIR_PARENTESIS:
             simbolo = self.scanner.obtener_simbolo()
@@ -364,4 +405,4 @@ class AnalizadorSintactico(object):
         simbolo = self.scanner.obtener_tipo_actual()
         if simbolo != AnalizadorLexico.PUNTO:
             self.out.write("Error Sintactico: Se esperaba punto (.) de finalizacion de programa\n")
-        self.out.write("noice\n")
+        self.generador.print_code()

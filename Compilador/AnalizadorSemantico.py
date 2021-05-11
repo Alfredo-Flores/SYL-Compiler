@@ -3,6 +3,7 @@ PROCEDIMIENTO = "procedimiento"
 VARIABLE = "variable"
 CONSTANTE = "constante"
 COMODIN = "comodin"
+NUMERO = "NUMERO"
 
 NOMBRE = 0
 TIPO = 1
@@ -22,10 +23,9 @@ class AnalizadorSemantico(object):
 	
 	def agregar_identificador(self, base, desplazamiento, nombre, tipo, valor=None):
 		if len(self.tabla) < base + desplazamiento:
-			raise ValueError("Base + desplazamiento fuera de rango")
+			raise ValueError("Error Semantico: Intento de acceso a una variable fuera de alcance")
 		if self._identificador_existente(nombre, base, desplazamiento):
-			self.out.write("Error Semantico: Variable Duplicada\n")
-			raise ValueError("Identificador en uso en este ambiente")
+			raise ValueError("Error Semantico: Variable Duplicada")
 		
 		if tipo == VARIABLE:
 			valor = self.cant_variables
@@ -58,6 +58,9 @@ class AnalizadorSemantico(object):
 	
 	def lectura_correcta(self, nombre, base, desplazamiento):
 		return self._busqueda(nombre, base, desplazamiento, [VARIABLE], "Solo pueden asignarse valores de lecturas en variables")
+
+	def tipos_correctos(self, tipo_uno, tipo_dos):
+		return tipo_uno == tipo_dos
 		
 	def agregar_comodin(self, nombre, base, desplazamiento):
 		for i in range(base + desplazamiento - 1, -1, -1):

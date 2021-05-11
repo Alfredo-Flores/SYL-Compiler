@@ -1,19 +1,19 @@
 VAR BASE, EXPO, RESU;
 
-PROCEDUR POT;
+PROCEDURE POT;
 IF EXPO > 0 THEN
    BEGIN
-        RESU = RESU * BASE;
+        RESU := RESU * BASE;
         EXPO := EXPO - 1;
         CALL POT
    END;
 
 BEGIN
      WRITE ('BASE: '); READLN(BASE);
-     WRITE ('EXPONENTE: '); READLN(EXPO)
+     WRITE ('EXPONENTE: '); READLN(EXPO);
      RESU := 1;
      CALL POT;
-     IF EXPO < 0  RESU := 0;
+     IF EXPO < 0 THEN RESU := 0;
      WRITELN ('RESULTADO: ', RESU);
      WRITELN
 END.
