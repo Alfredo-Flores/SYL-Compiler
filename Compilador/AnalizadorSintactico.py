@@ -413,7 +413,8 @@ class AnalizadorSintactico(object):
         return desplazamiento
 
     def detener_programa(self):
-        print("Ocurrio un error en la compilaion, revise el archivo salida.txt para ver el error")
+        input("\nOcurrio un error en la compilacion, revise el archivo salida.txt para ver el error\n\nPresione ENTER para salir\n")
+
         exit()
 
     def parsear_programa(self):
