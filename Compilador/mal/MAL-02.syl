@@ -10,7 +10,7 @@ begin
      if Y ( 0 then B := -B;
      while B > 0 then
          begin
-           if odd B then Z:= Z + A;
+           if Y < 0 then Z:= Z + A;
            A := A * 2;
            B := B / 2
          end;

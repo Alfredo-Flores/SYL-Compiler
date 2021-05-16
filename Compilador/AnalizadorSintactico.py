@@ -11,7 +11,6 @@ WHILE = "while"
 BEGIN = "begin"
 THEN = "then"
 DO = "do"
-ODD = "odd"
 END = "end"
 WRITE = "write"
 WRITELN = "writeln"
@@ -292,32 +291,29 @@ class AnalizadorSintactico(object):
     def _parsear_condicion(self, base, desplazamiento):
         simbolo = self.scanner.obtener_tipo_actual()
         valor = self.scanner.obtener_valor_actual()
-        if valor == ODD:
+
+        self._parsear_expresion(base, desplazamiento)
+        simbolo = self.scanner.obtener_tipo_actual()
+        comparador = self.scanner.obtener_valor_actual()
+        if simbolo == AnalizadorLexico.IGUAL or simbolo == AnalizadorLexico.MAYOR or simbolo == AnalizadorLexico.MAYOR_IGUAL or simbolo == AnalizadorLexico.MENOR or simbolo == AnalizadorLexico.MENOR_IGUAL or simbolo == AnalizadorLexico.DISTINTO:
+
+            if simbolo == AnalizadorLexico.IGUAL:
+                self.generador.pila_operadores.append(AnalizadorLexico.IGUAL)
+            elif simbolo == AnalizadorLexico.MAYOR:
+                self.generador.pila_operadores.append(AnalizadorLexico.MAYOR)
+            elif simbolo == AnalizadorLexico.MAYOR_IGUAL:
+                self.generador.pila_operadores.append(AnalizadorLexico.MAYOR_IGUAL)
+            elif simbolo == AnalizadorLexico.MENOR:
+                self.generador.pila_operadores.append(AnalizadorLexico.MENOR)
+            elif simbolo == AnalizadorLexico.DISTINTO:
+                self.generador.pila_operadores.append(AnalizadorLexico.DISTINTO)
+
             simbolo = self.scanner.obtener_simbolo()
             desplazamiento = self._parsear_expresion(base, desplazamiento)
         else:
-            self._parsear_expresion(base, desplazamiento)
-            simbolo = self.scanner.obtener_tipo_actual()
-            comparador = self.scanner.obtener_valor_actual()
-            if simbolo == AnalizadorLexico.IGUAL or simbolo == AnalizadorLexico.MAYOR or simbolo == AnalizadorLexico.MAYOR_IGUAL or simbolo == AnalizadorLexico.MENOR or simbolo == AnalizadorLexico.MENOR_IGUAL or simbolo == AnalizadorLexico.DISTINTO:
-
-                if simbolo == AnalizadorLexico.IGUAL:
-                    self.generador.pila_operadores.append(AnalizadorLexico.IGUAL)
-                elif simbolo == AnalizadorLexico.MAYOR:
-                    self.generador.pila_operadores.append(AnalizadorLexico.MAYOR)
-                elif simbolo == AnalizadorLexico.MAYOR_IGUAL:
-                    self.generador.pila_operadores.append(AnalizadorLexico.MAYOR_IGUAL)
-                elif simbolo == AnalizadorLexico.MENOR:
-                    self.generador.pila_operadores.append(AnalizadorLexico.MENOR)
-                elif simbolo == AnalizadorLexico.DISTINTO:
-                    self.generador.pila_operadores.append(AnalizadorLexico.DISTINTO)
-
-                simbolo = self.scanner.obtener_simbolo()
-                desplazamiento = self._parsear_expresion(base, desplazamiento)
-            else:
-                self.out.write("Error Sintactico: Se esperaba simbolo de comparacion en comparacion\n")
-                self.detener_programa()
-                desplazamiento = self._parsear_expresion(base, desplazamiento)
+            self.out.write("Error Sintactico: Se esperaba simbolo de comparacion en comparacion\n")
+            self.detener_programa()
+            desplazamiento = self._parsear_expresion(base, desplazamiento)
         return desplazamiento
 
     def _parsear_expresion(self, base, desplazamiento):

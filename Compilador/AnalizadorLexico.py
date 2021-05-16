@@ -4,7 +4,7 @@ VACIO = ""
 COMILLAS = "'"
 COMILLA_ERROR = "\""
 
-PALABRAS_RESERVADAS = ["if", "const", "var", "procedure", "call", "if", "while", "begin", "then", "do", "odd", "end", "write", "writeln", "readln"]
+PALABRAS_RESERVADAS = ["if", "const", "var", "procedure", "call", "if", "while", "begin", "then", "do", "end", "write", "writeln", "readln"]
 
 ERROR_LEXICO = "ERROR LEXICO"
 IDENTIFICADOR = "IDENTIFICADOR"
