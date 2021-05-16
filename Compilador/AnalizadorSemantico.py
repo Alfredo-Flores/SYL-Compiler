@@ -14,7 +14,10 @@ class AnalizadorSemantico(object):
 		self.out = output
 		self.tabla = []
 		self.cant_variables = 0
-	
+
+	def validar_identificador(self, identificador, tipo):
+		return identificador != tipo
+
 	def _identificador_existente(self, nombre, base, desplazamiento):
 		for i in range(base, base + desplazamiento):
 			if self.tabla[i][NOMBRE] == nombre:
@@ -46,6 +49,24 @@ class AnalizadorSemantico(object):
 					return False
 		self.out.write("Error Semantico: Identificador o variable no definida ("+ nombre +")\n")
 		return False
+
+	def print_code(self):
+		print("\nTabla de simbolos en fase Semantica: \n")
+		listaFinal = []
+		for simbolo in self.tabla:
+			listaFinal.append([str(simbolo[0]), str(simbolo[1]), str(simbolo[2])])
+
+		header = ("Nombre", "Tipo", "Valor")
+		widths = [len(cell) for cell in header]
+		for row in listaFinal:
+			for i, cell in enumerate(row):
+				widths[i] = max(len(str(cell)), widths[i])
+
+		formatted_row = ' '.join('{:%d}' % width for width in widths)
+
+		print(formatted_row.format(*header))
+		for row in listaFinal:
+			print(formatted_row.format(*row))
 		
 	def asignacion_correcta(self, nombre, base, desplazamiento):
 		return self._busqueda(nombre, base, desplazamiento, [VARIABLE], "Solo pueden utilizarse variables del lado izquierdo de una asignacion")

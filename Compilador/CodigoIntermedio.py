@@ -13,6 +13,7 @@ class CodigoIntermedio:
         self.cuadruplos.append(code)
 
     def print_code(self):
+        print("\nCuadruplos de la Generacion de Codigo Intermedio: \n")
         listaFinal = []
         for linea, cuadruplo in enumerate(self.cuadruplos):
             listaFinal.append([linea, cuadruplo[0],  cuadruplo[1],  cuadruplo[2], cuadruplo[3]])

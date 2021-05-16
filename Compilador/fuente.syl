@@ -1,0 +1,20 @@
+var X, Y, A, B, Z;
+
+procedure INICIAR;
+  const TEMP = 2, TEP = 3, TP = 4;
+  procedure ASIGNAR;
+    X := TEMP;
+  call ASIGNAR;
+
+begin
+  write ('NUM='); readln (Y);
+  call INICIAR;
+  X := Y-X*Y;
+  if X < 0 then Z:= Y+Y;
+  while B > 0 do
+         begin
+           if B > 1 then Z:= Z + A;
+           A := A * 2;
+           B := A / 2
+         end;
+end.

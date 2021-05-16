@@ -5,7 +5,7 @@ import CodigoIntermedio as generador
 
 if __name__ == "__main__":
 	output = open("salida.txt", "w")
-	ruta = "Archivos/BIEN-00.syl"
+	ruta = "fuente.syl"
 	
 	al = lexico.AnalizadorLexico(ruta, output)
 	an_sem = semantico.AnalizadorSemantico(output)
@@ -15,3 +15,6 @@ if __name__ == "__main__":
 	an_sintac.parsear_programa()
 
 	output.close()
+
+	input("\nCompilacion exitosa, revise las tablas y revisa salida.txt para saber si hay alguna anomalia\n\nPresione ENTER para salir\n")
+
