@@ -237,14 +237,3 @@ class AnalizadorLexico(object):
 	def _obtener_asignacion(self, index):
 		self._obtener_combinaciones(index, ":", ["="])
 		if self.valor != ":=": self.valor = None
-			
-if __name__=="__main__":
-	output = open("salida.txt", "w")
-	import sys
-	ruta = sys.argv[1] if len(sys.argv) > 1 else "Archivos/BIEN-01.PL0"
-	al = AnalizadorLexico(ruta, output)
-	while True:
-		c = al.obtener_simbolo()
-		if c == EOF: break
-		print(c)
-	output.close()
